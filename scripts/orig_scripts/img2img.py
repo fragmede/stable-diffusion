@@ -259,7 +259,8 @@ def main():
                         c = model.get_learned_conditioning(prompts)
 
                         # encode (scaled latent)
-                        z_enc = sampler.stochastic_encode(init_latent, torch.tensor([t_enc]*batch_size).to(device))
+                        z_enc = sampler.stochastic_encode(init_latent, torch.tensor([t_enc] * batch_size).to(device), noise=torch.randn_like(init_latent, device="cpu").to(device) if opt.fixed_code else None,)
+
                         # decode it
                         samples = sampler.decode(z_enc, c, t_enc, unconditional_guidance_scale=opt.scale,
                                                  unconditional_conditioning=uc,)
